@@ -1,11 +1,9 @@
 package pl.przemek.todosapp.api.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 import pl.przemek.todosapp.api.dto.AuthenticationDTO;
 import pl.przemek.todosapp.api.model.User;
 import pl.przemek.todosapp.api.repository.UserRepository;
-import pl.przemek.todosapp.api.utils.UserAlreadyExistsException;
 
 import java.util.Optional;
 
@@ -20,7 +18,7 @@ public class UserController {
 
     @PostMapping("/login")
     public AuthenticationDTO doesUserExist(@RequestBody User user) {
-        if ( user == null || user.getUsername() == "") {
+        if ( user == null || user.getUsername().equals("")) {
             return new AuthenticationDTO(false);
         }
         Optional<User> databaseUser = userRepository.findByUsername(user.getUsername());
@@ -29,11 +27,9 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public AuthenticationDTO newUser(@RequestBody User user) throws UserAlreadyExistsException {
-        if (user.getUsername() == "") {
+    public AuthenticationDTO newUser(@RequestBody User user) {
+        if (user.getUsername().equals("") || userRepository.findByUsername(user.getUsername()).isPresent()) {
             return new AuthenticationDTO(false);
-        } else if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException("User with username: " + user.getUsername() + " already exists");
         } else {
             User newUser = new User(user.getUsername());
             userRepository.save(newUser);
