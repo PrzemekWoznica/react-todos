@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body, #root{
+    width: 100%;
+    min-height: 100vh;
+    background: black;
+}
+
+#root{
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-container{
+    background: rgba(255, 255, 255, 0.8);
+    width: 60%;
+    height: 60vh;
+    border: 3px solid #909090;
+    border-radius: 20px;
+    box-shadow: 0 0 20px white;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.input-container h1{
+    text-align: center;
+    font-size: 3em;
+    letter-spacing: 10px;
+}
+
+.input-field{
+    width: 80%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.input-field input[type='text']{
+    background: inherit;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 1.2em;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.input-field input[type='text']:focus{
+    border-radius: 27px;
+    outline: none;
+    -webkit-transform: scale(1.15);
+    -moz-transform: scale(1.15);
+    transform: scale(1.15);
+}
+
+.signup-link-button, .change-user{
+    background: #0a0;
+    padding: 10px;
+    border: 2px solid #050;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    outline: none;
+    font-size: 0.9em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.or{
+    font-size: 1.5em;
+}
+.signup-link-button{
+    border-radius: 5px;
+    font-size: 1.5em;
+}
+
+.signup-link-button:active, .change-user:active{
+    background: rgba(80, 255, 80, 0.7);
+    transform: none;
+}
+
+.focused{
+    -webkit-transform: scale(1.15) translateX(20%);
+    -moz-transform: scale(1.15) translateX(20%);
+    transform: scale(1.15) translateX(20%);
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    transition: 0.5s;
+}
+
+.signup-link-button:hover, .change-user:hover{
+    background: rgba(0,170,0,1);
+    background: radial-gradient(circle, rgba(0,170,0,1) 0%, rgba(0,85,0,1) 100%);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+.todos-container{
+    background: rgba(255, 255, 255, 0.8);
+    width: 85%;
+    min-height: 100vh;
+    box-shadow: 0 0 20px white;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.todos-container h1{
+    margin-top: 20px;
+    font-size: 6em;
+    letter-spacing: 10px;
+}
+
+.change-user{
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 1.5em;
+}
+
+.todo-list{
+    background: rgba(0, 0, 0, 0.5);
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: fit-content;
+    min-height: 44vh;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.remove-all-todos{
+    background: rgba(255, 0, 0, 1.0);
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.remove-all-todos:hover{
+    background: rgba(255, 50, 50, 1.0);
+}
+
+.todo-list-no-todos{
+    background: rgba(0, 0, 0, 0.5);
+    width: 90%;
+    min-height: 44vh;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.todos{
+    min-width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.todo, .todo-denied{
+    background: rgba(0, 0, 0, 0.6);
+    max-width: 97%;
+    min-width: 97%;
+    height: fit-content;
+    padding: 10px;
+    margin-top: 7px;
+    font-size: 1.5em;
+    color: rgb(220, 220, 220);
+    border: 1px solid white;
+    box-shadow: 4px 4px 3px black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.todo div:first-of-type, .todo-denied div:first-of-type{
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.todo-denied{
+    background: rgba(255, 50, 50, 0.7);
+}
+
+.todo-denied div:first-of-type{
+    text-decoration-line: line-through;
+    text-decoration-color: rgba(255, 0, 0, 0.9);
+}
+
+.buttons{
+    min-width: 15%;
+    display: flex;
+    justify-content: center;
+}
+
+#edit{
+    margin-right: 25px;
+    cursor: pointer;
+}
+
+#delete{
+    cursor: pointer;
+}

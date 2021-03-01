@@ -1,0 +1,12 @@
+.idea
+.mvn
+client/build
+client/.eslintcache
+client/node_modules
+client/package-lock.json
+client/public/favicon.ico
+**/application.properties
+mvnw
+mvnw.cmd
+*.iml
+/target/
