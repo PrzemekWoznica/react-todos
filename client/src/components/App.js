@@ -47,7 +47,7 @@ function App(props){
         <div className='todos-container'>
             <h1>Todos</h1>
             <p className='change-user' onClick={changeUser}>Change user</p>
-            <TodoInput handleChange={handleChange} handleEnterPress={handleEnterPress} handleSubmit={handleSubmit}/>
+            <TodoInput handleChange={handleChange} handleEnterPress={handleEnterPress} handleAdd={handleSubmit} handleSubmit={handleSubmit}/>
             <TodoList todos={props.todos} />
         </div>
     );

@@ -25,12 +25,14 @@ function Signup(props){
         };
     };
 
+
     return (
         <div className='input-container'>
             <h1>Sign up</h1>
             <div className='input-field'>
-                <input type='text' name='content' onChange={handleChange} onKeyDown={handleEnter} placeholder='Enter your username, then press Enter' autoComplete='off'/>
+                <input type='text' name='content' onChange={handleChange} onKeyDown={handleEnter} placeholder='Enter your username' autoComplete='off'/>
             </div>
+            <div className='input-button' onClick={handleSignUp}>Sign Up</div>
         </div>
     );
 };
