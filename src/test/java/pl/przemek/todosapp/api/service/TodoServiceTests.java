@@ -1,62 +1,161 @@
 package pl.przemek.todosapp.api.service;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pl.przemek.todosapp.api.model.Todo;
 import pl.przemek.todosapp.api.repository.TodoRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class TodoServiceTests {
-    @Autowired
+    @InjectMocks
     TodoService todoService;
 
-    @MockBean
+    @Mock
     TodoRepository todoRepository;
+
+    @Captor
+    ArgumentCaptor<Todo> captor;
+
+    private final static Long TODO_ID = 1L;
+    private final static Long WRONG_TODO_ID = 2L;
+    private final static String USER = "USER";
+    private final static String NOT_USER = "NOT_USER";
 
     @Test
     void shouldReturnList() {
-        Todo testTodo = new Todo("test content", false, "test user");
+        //given
+        Todo testTodo = createTodo();
         List<Todo> testList = new ArrayList<>();
         testList.add(testTodo);
         when(todoRepository.findByUser(anyString())).thenReturn(testList);
 
-        assertThat(todoService.showTodos("test")).isNotEmpty();
-        assertThat(todoService.showTodos("test")).isInstanceOf(List.class);
-        verify(todoRepository, times(2)).findByUser(any());
+        //when
+        List<Todo> resultList = todoService.showTodos(USER);
+
+        //then
+        verify(todoRepository, times(1)).findByUser(USER);
+        assertThat(resultList.size()).isEqualTo(1);
+    }
+
+    @Test
+    void shouldReturnEmptyList() {
+        //given
+        when(todoRepository.findByUser(anyString())).thenReturn(Collections.emptyList());
+
+        //when
+        List<Todo> resultList = todoService.showTodos(NOT_USER);
+
+        //then
+        verify(todoRepository, times(1)).findByUser(NOT_USER);
+        assertThat(resultList).isEmpty();
     }
 
     @Test
     void shouldAddAndReturnTodo() {
-        Todo testTodo = new Todo("test content", false, "test user");
-        testTodo.setId(1L);
-
+        //given
+        Todo testTodo = createTodo();
         when(todoRepository.save(any())).thenReturn(testTodo);
 
-        assertThat(todoService.addTodo(new Todo(), "test")).isInstanceOf(Todo.class);
+        //when
+        Todo resultTodo = todoService.addTodo(testTodo, USER);
+
+        //then
         verify(todoRepository, times(1)).save(any());
+        assertThat(resultTodo).isEqualTo(testTodo);
     }
 
     @Test
-    void changeTodo() {
+    void shouldChangeTodo() {
+        //given
+        when(todoRepository.findByIdAndUser(anyLong(), anyString())).thenReturn(Optional.of(createTodo()));
+        when(todoRepository.findById(anyLong())).thenReturn(Optional.of(createTodo()));
+
+        //when
+        todoService.changeTodo(TODO_ID, USER);
+
+        //then
+        verify(todoRepository, times(1)).findByIdAndUser(TODO_ID, USER);
+        verify(todoRepository, times(1)).save(captor.capture());
+        verify(todoRepository, times(1)).findById(TODO_ID);
+
+        assertThat(captor.getValue().getChecked()).isTrue();
+    }
+
+    @Test
+    void shouldNotChangeTodoIfTodoNotFound() {
+        //given
+        when(todoRepository.findByIdAndUser(anyLong(), anyString())).thenReturn(Optional.empty());
+
+        //when
+        todoService.changeTodo(WRONG_TODO_ID, USER);
+
+        //then
+        verify(todoRepository, times(1)).findByIdAndUser(WRONG_TODO_ID, USER);
+        verify(todoRepository, times(1)).findById(WRONG_TODO_ID);
+        verifyNoMoreInteractions(todoRepository);
+    }
+
+    @Test
+    void shouldRemoveTodos() {
+        //given
+        todoRepository.save(createTodo());
+        todoRepository.save(createTodo());
+
+        //when
+        todoService.removeTodos(USER);
+
+        //then
+        verify(todoRepository, times(1)).deleteByUser(USER);
+
+        assertThat(todoRepository.findByUser(USER)).isEmpty();
+    }
+
+    @Test
+    void shouldRemoveTodo() {
+        //given
+        Todo testTodo = createTodo();
+        when(todoRepository.findByIdAndUser(anyLong(), anyString())).thenReturn(Optional.of(testTodo));
+
+        //when
+        todoService.removeTodo(TODO_ID, USER);
+
+        //then
+        verify(todoRepository, times(1)).findByIdAndUser(TODO_ID, USER);
+        verify(todoRepository, times(1)).delete(testTodo);
+        verifyNoMoreInteractions(todoRepository);
 
     }
 
     @Test
-    void removeTodos() {
+    void shouldNotRemoveTodoIfTodoNotFound() {
+        //given
+        when(todoRepository.findByIdAndUser(anyLong(), anyString())).thenReturn(Optional.empty());
+
+        //when
+        todoService.removeTodo(WRONG_TODO_ID, USER);
+
+        //then
+        verify(todoRepository, times(1)).findByIdAndUser(WRONG_TODO_ID, USER);
+        verifyNoMoreInteractions(todoRepository);
 
     }
 
-    @Test
-    void removeTodo() {
+    private Todo createTodo() {
+        return new Todo(TODO_ID, null, false, USER);
     }
 }

@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface TodoRepository extends JpaRepository<Todo, Long> {
     Optional<Todo> findByIdAndUser(Long id, String user);
     List<Todo> findByUser(String user);
+    void deleteByUser(String user);
 }

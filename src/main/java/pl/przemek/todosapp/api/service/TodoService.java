@@ -34,10 +34,7 @@ public class TodoService {
     }
 
     public void removeTodos(String user) {
-        todoRepository.findByUser(user)
-                .forEach(todo -> {
-                    todoRepository.deleteById(todo.getId());
-                });
+        todoRepository.deleteByUser(user);
     }
 
     public void removeTodo(Long id, String user) {
